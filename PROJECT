@@ -1,0 +1,19 @@
+domain: uptime.com
+layout:
+- go.kubebuilder.io/v3
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
+projectName: uptime-robot-operator
+repo: github.com/hussnain612/uptime-robot-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: uptime.com
+  group: uptime
+  kind: Monitor
+  path: github.com/hussnain612/uptime-robot-operator/api/v1alpha1
+  version: v1alpha1
+version: "3"
