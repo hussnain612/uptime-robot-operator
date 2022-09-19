@@ -20,22 +20,31 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // MonitorSpec defines the desired state of Monitor
 type MonitorSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Name of uptime monitor
+	Name string `json:"name"`
 
-	// Foo is an example field of Monitor. Edit monitor_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// +kubebuilder:validation:Required
+	// URL to monitor
+	URL string `json:"url"`
+
+	// +kubebuilder:validation:Required
+	// The uptimerobot monitor type (http, keyword, ping, port, heartbeat)
+	// +kubebuilder:validation:Enum=http;keyword;ping;port;heartbeat
+	MonitorType string `json:"monitorType,omitempty"`
+
+	// The uptimerobot monitor subtype for port monitoring
+	MonitorSubtype int `json:"monitorSubtype,omitempty"`
 }
 
 // MonitorStatus defines the observed state of Monitor
 type MonitorStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// ID of uptime monitor
+	MonitorID string `json:"monitorID"`
+
+	// Status conditions for tenant
+	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
 //+kubebuilder:object:root=true
