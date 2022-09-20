@@ -75,7 +75,7 @@ jobs:
         file: ${{ env.DOCKER_FILE_PATH  }}
         push: true
         tags: |
-          hussnain612/uptime-robot-operator:${{ steps.generate_tag.outputs.GIT_TAG }}
+          ${{ github.repository }}/uptime-robot-operator:${{ steps.generate_tag.outputs.GIT_TAG }}
         labels: |
           org.opencontainers.image.source=${{ github.event.repository.clone_url }}
           org.opencontainers.image.created=${{ steps.prep.outputs.created }}
@@ -86,5 +86,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
       with:
-        message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ secrets.STAKATER_NEXUS_REGISTRY }}/${{ github.repository }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
+        message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ github.repository }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
         allow-repeats: false
