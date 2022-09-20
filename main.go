@@ -32,7 +32,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	uptimev1alpha1 "github.com/hussnain612/uptime-robot-operator/api/v1alpha1"
-	"github.com/hussnain612/uptime-robot-operator/controllers"
+	"github.com/hussnain612/uptime-robot-operator/controllers/monitor"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -89,9 +89,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.MonitorReconciler{
+	if err = (&monitor.MonitorReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Monitor"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Monitor")
 		os.Exit(1)
