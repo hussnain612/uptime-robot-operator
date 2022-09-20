@@ -68,6 +68,10 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Generate image repository path
+      run: |
+        echo IMAGE_REPOSITORY=$(echo dockerhub.io/${{ github.actor }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+
     - name: Build and push
       uses: docker/build-push-action@v2
       with:
@@ -76,6 +80,8 @@ jobs:
         pull: true
         push: true
         cache-to: type=inline
+        tags: |
+          ${{ env.IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.GIT_TAG }}
         labels: |
           org.opencontainers.image.source=${{ github.event.repository.clone_url }}
           org.opencontainers.image.created=${{ steps.prep.outputs.created }}
