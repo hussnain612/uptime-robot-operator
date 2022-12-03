@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -31,4 +32,19 @@ func (r *MonitorReconciler) patchMonitor(ctx context.Context, log logr.Logger, m
 		log.Error(err, "failed to patch tenant status")
 	}
 	return err
+}
+
+func (r *MonitorReconciler) getMonitorParameters(monitor v1alpha1.Monitor, parameters map[string]string) map[string]string {
+	parameters["friendly_name"] = monitor.Spec.Name
+	parameters["url"] = monitor.Spec.URL
+	parameters["type"] = fmt.Sprint(monitor.Spec.MonitorType)
+
+	if monitor.Spec.MonitorSubtype != 0 {
+		parameters["sub_type"] = fmt.Sprint(monitor.Spec.MonitorSubtype)
+	}
+	if monitor.Spec.MonitorPort != 0 {
+		parameters["port"] = fmt.Sprint(monitor.Spec.MonitorPort)
+	}
+
+	return parameters
 }

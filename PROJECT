@@ -16,4 +16,7 @@ resources:
   kind: Monitor
   path: github.com/hussnain612/uptime-robot-operator/api/v1alpha1
   version: v1alpha1
+  webhooks:
+    validation: true
+    webhookVersion: v1
 version: "3"

@@ -20,65 +20,43 @@ func (r *MonitorReconciler) handleCreate(ctx context.Context, req ctrl.Request, 
 
 	patchBase := client.MergeFrom(monitor.DeepCopy())
 
+	var path string
+	res := models.UptimeRobotMonitorResponse{}
+	parameters := map[string]string{}
+
 	// Check if monitor is already added to uptime-robot
 	if monitor.Status.MonitorID != "" {
 		// Update monitor
-		res := models.UptimeMonitorNewMonitorResponse{}
-		path := "editMonitor"
+		path = "editMonitor"
 
-		parameters := map[string]string{}
 		parameters["id"] = monitor.Status.MonitorID
-		parameters["friendly_name"] = monitor.Spec.Name
-		parameters["url"] = monitor.Spec.URL
-		parameters["type"] = "1"
-
-		body, err := util.HandleAPIRequestForUptimeRobot(log, ApiURL, path, apiKey, parameters)
-		if err != nil {
-			return reconcilerUtil.RequeueWithError(err)
-		}
-
-		err = json.Unmarshal(body, &res)
-		if err != nil {
-			log.Error(err, "failed to unmarshal new monitor response body")
-		}
-
-		if res.Stat == "ok" {
-			// Monitor added successfully
-			log.Info(fmt.Sprintf("Monitor '%s' updated", monitor.Name))
-			monitor.Status.MonitorID = fmt.Sprint(res.Monitor.ID)
-		} else {
-			return reconcilerUtil.RequeueWithError(fmt.Errorf(res.Error.Message))
-		}
+		parameters = r.getMonitorParameters(*monitor, parameters)
 	} else {
 		// Add monitor to uptime-robot
-		res := models.UptimeMonitorNewMonitorResponse{}
-		path := "newMonitor"
+		path = "newMonitor"
 
-		parameters := map[string]string{}
-		parameters["friendly_name"] = monitor.Spec.Name
-		parameters["url"] = monitor.Spec.URL
-		parameters["type"] = "1"
-
-		body, err := util.HandleAPIRequestForUptimeRobot(log, ApiURL, path, apiKey, parameters)
-		if err != nil {
-			return reconcilerUtil.RequeueWithError(err)
-		}
-
-		err = json.Unmarshal(body, &res)
-		if err != nil {
-			log.Error(err, "failed to unmarshal new monitor response body")
-		}
-
-		if res.Stat == "ok" {
-			// Monitor added successfully
-			log.Info(fmt.Sprintf("Monitor '%s' added", monitor.Name))
-			monitor.Status.MonitorID = fmt.Sprint(res.Monitor.ID)
-		} else {
-			return reconcilerUtil.RequeueWithError(fmt.Errorf(res.Error.Message))
-		}
+		parameters = r.getMonitorParameters(*monitor, parameters)
 	}
 
-	err := r.patchMonitor(ctx, log, monitor, patchBase)
+	body, err := util.HandleAPIRequestForUptimeRobot(log, ApiURL, path, apiKey, parameters)
+	if err != nil {
+		return reconcilerUtil.RequeueWithError(err)
+	}
+
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		log.Error(err, "failed to unmarshal new monitor response body")
+	}
+
+	if res.Stat == "ok" {
+		// Monitor added successfully
+		log.Info(fmt.Sprintf("Monitor '%s' added", monitor.Name))
+		monitor.Status.MonitorID = fmt.Sprint(res.Monitor.ID)
+	} else {
+		return reconcilerUtil.RequeueWithError(fmt.Errorf(res.Error.Message))
+	}
+
+	err = r.patchMonitor(ctx, log, monitor, patchBase)
 	if err != nil {
 		return reconcilerUtil.RequeueWithError(err)
 	}
