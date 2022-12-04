@@ -43,7 +43,8 @@ jobs:
       id: generate_tag
       run: |
         sha=${{ github.event.pull_request.head.sha }}
-        tag="SNAPSHOT-PR-${{ github.event.pull_request.number }}-${{ sha:0:8 }}"
+        echo "SHA=`echo ${sha} | cut -c1-8`" >> $GITHUB_ENV
+        tag="SNAPSHOT-PR-${{ github.event.pull_request.number }}-${{ env.SHA }}"
         echo GIT_TAG=$(echo ${ tag }) >> $GITHUB_ENV
 
     - name: Set up QEMU
