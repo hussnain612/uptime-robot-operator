@@ -23,7 +23,7 @@ import (
 // MonitorSpec defines the desired state of Monitor
 type MonitorSpec struct {
 	// Name of uptime monitor
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	// URL to monitor
 	URL string `json:"url"`

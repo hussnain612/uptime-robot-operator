@@ -35,7 +35,10 @@ func (r *MonitorReconciler) patchMonitor(ctx context.Context, log logr.Logger, m
 }
 
 func (r *MonitorReconciler) getMonitorParameters(monitor v1alpha1.Monitor, parameters map[string]string) map[string]string {
-	parameters["friendly_name"] = monitor.Spec.Name
+	if monitor.Spec.Name == "" {
+		parameters["friendly_name"] = fmt.Sprintf("%s-%s", monitor.Name, monitor.Namespace)
+	}
+
 	parameters["url"] = monitor.Spec.URL
 	parameters["type"] = fmt.Sprint(monitor.Spec.MonitorType)
 

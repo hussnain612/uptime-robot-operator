@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/hussnain612/uptime-robot-operator/api/v1alpha1"
 	util "github.com/hussnain612/uptime-robot-operator/controllers/utils"
+	"github.com/hussnain612/uptime-robot-operator/pkg/constants"
 	"github.com/hussnain612/uptime-robot-operator/pkg/models"
 	reconcilerUtil "github.com/stakater/operator-utils/util/reconciler"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -61,5 +61,5 @@ func (r *MonitorReconciler) handleCreate(ctx context.Context, req ctrl.Request, 
 		return reconcilerUtil.RequeueWithError(err)
 	}
 
-	return reconcilerUtil.RequeueAfter(time.Minute)
+	return reconcilerUtil.RequeueAfter(constants.MonitorDefaultRequeueTime)
 }
