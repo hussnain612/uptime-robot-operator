@@ -43,8 +43,8 @@ jobs:
       id: generate_tag
       run: |
         sha=${{ github.event.pull_request.head.sha }}
-        tag="SNAPSHOT-PR-${{ github.event.pull_request.number }}-${sha:0:8}"
-        echo GIT_TAG=$(echo ${tag}) >> $GITHUB_ENV
+        tag="SNAPSHOT-PR-${{ github.event.pull_request.number }}-${ sha:0:8 }"
+        echo GIT_TAG=$(echo ${ tag }) >> $GITHUB_ENV
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -67,7 +67,7 @@ jobs:
         push: true
         cache-to: type=inline
         tags: |
-          ${{ github.actor }}/uptime-robot-operator:${{ steps.generate_tag.outputs.GIT_TAG }}
+          ${{ github.actor }}/uptime-robot-operator:${{ env.GIT_TAG }}
         labels: |
           org.opencontainers.image.source=${{ github.event.repository.clone_url }}
           org.opencontainers.image.created=${{ steps.prep.outputs.created }}

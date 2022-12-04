@@ -44,6 +44,7 @@ const (
 	ApiURL           string = "https://api.uptimerobot.com/v2/"
 )
 
+//+kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;create;update;
 //+kubebuilder:rbac:groups=uptime.uptime.com,resources=monitors,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=uptime.uptime.com,resources=monitors/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=uptime.uptime.com,resources=monitors/finalizers,verbs=update
