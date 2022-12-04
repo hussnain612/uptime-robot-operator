@@ -14,6 +14,14 @@ rules:
   - get
   - update
 - apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - uptime.uptime.com
   resources:
   - monitors
