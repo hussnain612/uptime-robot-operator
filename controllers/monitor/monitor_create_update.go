@@ -16,22 +16,25 @@ import (
 
 func (r *MonitorReconciler) handleCreate(ctx context.Context, req ctrl.Request, monitor *v1alpha1.Monitor, apiKey string) (ctrl.Result, error) {
 	log := r.Log.WithValues("monitor", req.NamespacedName)
-	log.Info("Creating/Updating monitor: " + monitor.ObjectMeta.Name)
-
-	patchBase := client.MergeFrom(monitor.DeepCopy())
 
 	var path string
 	res := models.UptimeRobotMonitorResponse{}
 	parameters := map[string]string{}
 
+	patchBase := client.MergeFrom(monitor.DeepCopy())
+
 	// Check if monitor is already added to uptime-robot
 	if monitor.Status.MonitorID != "" {
+		log.Info("Updating monitor")
+
 		// Update monitor
 		path = "editMonitor"
 
 		parameters["id"] = monitor.Status.MonitorID
 		parameters = r.getMonitorParameters(*monitor, parameters)
 	} else {
+		log.Info("Creating monitor")
+
 		// Add monitor to uptime-robot
 		path = "newMonitor"
 
