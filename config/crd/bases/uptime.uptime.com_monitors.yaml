@@ -35,19 +35,29 @@ spec:
           spec:
             description: MonitorSpec defines the desired state of Monitor
             properties:
+              monitorPort:
+                description: The uptimerobot monitor port for custom port monitoring
+                type: integer
               monitorSubtype:
                 description: The uptimerobot monitor subtype for port monitoring
+                enum:
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                - 6
+                - 99
                 type: integer
               monitorType:
-                description: The uptimerobot monitor type (http, keyword, ping, port,
-                  heartbeat)
+                description: The uptimerobot monitor type
                 enum:
-                - http
-                - keyword
-                - ping
-                - port
-                - heartbeat
-                type: string
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                type: integer
               name:
                 description: Name of uptime monitor
                 type: string
@@ -55,7 +65,7 @@ spec:
                 description: URL to monitor
                 type: string
             required:
-            - name
+            - monitorType
             - url
             type: object
           status:
@@ -67,8 +77,8 @@ spec:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
                     use as an array at the field path .status.conditions.  For example,
-                    type FooStatus struct{ // Represents the observations of a foo's
-                    current state. // Known .status.conditions.type are: \"Available\",
+                    \n type FooStatus struct{ // Represents the observations of a
+                    foo's current state. // Known .status.conditions.type are: \"Available\",
                     \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
                     // +listType=map // +listMapKey=type Conditions []metav1.Condition
                     `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"

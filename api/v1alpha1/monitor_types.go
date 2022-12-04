@@ -23,19 +23,21 @@ import (
 // MonitorSpec defines the desired state of Monitor
 type MonitorSpec struct {
 	// Name of uptime monitor
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 
-	// +kubebuilder:validation:Required
 	// URL to monitor
 	URL string `json:"url"`
 
-	// +kubebuilder:validation:Required
-	// The uptimerobot monitor type (http, keyword, ping, port, heartbeat)
-	// +kubebuilder:validation:Enum=http;keyword;ping;port;heartbeat
-	MonitorType string `json:"monitorType,omitempty"`
+	// The uptimerobot monitor type
+	// +kubebuilder:validation:Enum=1;2;3;4;5
+	MonitorType int `json:"monitorType"`
 
 	// The uptimerobot monitor subtype for port monitoring
+	// +kubebuilder:validation:Enum=1;2;3;4;5;6;99
 	MonitorSubtype int `json:"monitorSubtype,omitempty"`
+
+	// The uptimerobot monitor port for custom port monitoring
+	MonitorPort int `json:"monitorPort,omitempty"`
 }
 
 // MonitorStatus defines the observed state of Monitor
