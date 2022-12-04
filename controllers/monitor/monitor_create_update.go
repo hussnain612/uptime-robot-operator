@@ -52,8 +52,11 @@ func (r *MonitorReconciler) handleCreate(ctx context.Context, req ctrl.Request, 
 	}
 
 	if res.Stat == "ok" {
-		// Monitor added successfully
-		log.Info(fmt.Sprintf("Monitor '%s' added", monitor.Name))
+		if monitor.Status.MonitorID == "" {
+			log.Info(fmt.Sprintf("Monitor '%s' added", monitor.Name))
+		} else {
+			log.Info(fmt.Sprintf("Monitor '%s' updated", monitor.Name))
+		}
 		monitor.Status.MonitorID = fmt.Sprint(res.Monitor.ID)
 	} else {
 		return reconcilerUtil.RequeueWithError(fmt.Errorf(res.Error.Message))
