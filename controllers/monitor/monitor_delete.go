@@ -20,7 +20,7 @@ func (r *MonitorReconciler) handleDelete(ctx context.Context, req ctrl.Request, 
 	log.Info("Deleting monitor: " + monitor.ObjectMeta.Name)
 
 	// Remove monitor from uptime-robot
-	res := models.UptimeMonitorNewMonitorResponse{}
+	res := models.UptimeRobotMonitorResponse{}
 	path := "deleteMonitor"
 
 	parameters := map[string]string{}
